@@ -59,6 +59,15 @@ def addToTrack(track, seq):
 				off = midi.NoteOffEvent(tick = 0, pitch = notes[j])
 			track.append(off)
 
+# make major 9 or minor 9 chords
+def rootToChord(root, maj):
+	# major 9
+	if maj == 1:
+		return [root, root+4, root+7, root+11, root+14]
+	elif maj == 0:
+		return [root, root+3, root+7, root+10, root+14]
+
+
 
 oursong = midi.Pattern()
 
