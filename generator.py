@@ -2,6 +2,22 @@
 
 import midi
 import random
+import json
+import os
+
+drum_beats_dict = {}
+
+
+for root, dirs, files in os.walk(os.getcwd()):
+    print files
+    for file in files:
+        if ".json" in file:
+            print file
+
+            with open() as json_f:
+                drum_beats_dict = json.loads(json_f)
+    
+print drum_beats_dict
 
 #initialize tempo
 random.seed()
