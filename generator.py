@@ -11,24 +11,28 @@ tempo = random.uniform(120,125)
 tpb = 220
 
 # drum part
-# [0,1,2,3] implies downbeats, so 0 is beat 1, 1 is beat 2, 0,5 would be 1&
-hat1 = [0,1,2,3]
-snr1 = [1,3]
+# first item in list is the starting beat index of the first note
+# the subsequent items are note lengths
+# everything is held at full length
+hat1 = [0,1,1,1,1]
+snr1 = [1,2,1]
 
 # track is the track to add a sequence to
 # note is the note in midi.G_3 or equivalent
 # notelen in beats, not ticks
 # seq is sequence of beats to append, e.g. hat1
-def addToTrack(track, note, notelen, seq):
+def addToTrack(track, note, seq):
 	l = len(seq)
-	current = 0
-	for i in range(0,l):
+	start = seq[0]*tpb
+	for i in range(1,l):
 		t = int(seq[i]*tpb)
-		#on = midi.NoteOnEvent(tick = t, velocity = 127, pitch = note)
-		on = midi.NoteOnEvent(tick = 110, velocity = 127, pitch = note)
+		if i == 1:
+			on = midi.NoteOnEvent(tick = start, velocity = 127, pitch = note)
+		else:
+			on = midi.NoteOnEvent(tick = 0, velocity = 127, pitch = note)
 		track.append(on)
 		#off = midi.NoteOffEvent(tick = int(t + notelen*tpb), pitch = note)
-		off = midi.NoteOffEvent(tick = 110, pitch = note)
+		off = midi.NoteOffEvent(tick = t, pitch = note)
 		track.append(off)
 
 
@@ -38,8 +42,8 @@ oursong = midi.Pattern()
 drums = midi.Track()
 oursong.append(drums)
 
-addToTrack(drums, midi.D_3, 0.5, hat1)
-#addToTrack(drums, midi.C_3, 1, snr1)
+addToTrack(drums, midi.D_4, hat1)
+addToTrack(drums, midi.C_6, snr1)
 
 drums.append(midi.EndOfTrackEvent(tick = 1))
 
