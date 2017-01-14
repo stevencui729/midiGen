@@ -5,37 +5,77 @@ import random
 import json
 import os
 
-drum_beats_dict = {}
+
+def main():
+    drum_beats_dict = {}
 
 
-for root, dirs, files in os.walk(os.getcwd()):
-    print files
-    for file in files:
-        if ".json" in file:
-            print file
+    with open("drums.json") as json_f:
+        drum_beats_dict = json.load(json_f)
 
-            with open() as json_f:
-                drum_beats_dict = json.loads(json_f)
-    
-print drum_beats_dict
+    # visualization of json
+    #for drum in drum_beats_dict.keys():
+    #    print drum
+    #    for pattern in drum_beats_dict[drum].keys():
+    #        print pattern
+    #        print drum_beats_dict[drum][pattern]
+    #    print "\n"
 
-#initialize tempo
-random.seed()
-tempo = random.uniform(120,125)
+    #initialize tempo
+    random.seed()
+    tempo = random.uniform(120,125)
 
-# ticks per beat
-tpb = 220
+    # ticks per beat
+    tpb = 220
 
-# drum part
-# [[NOTES], start length (beats), chord length (beats)]
-hat1 = [[[107, 110, 114],0,1],[[107],0,1],[[107, 111, 114],0,1],[[107],0,1]]
-#snr1 = [[1,2,1]
+    # drum part
+    # [[NOTES], start length (beats), chord length (beats)]
+    #hat1 = [[[107, 110, 114],0,1],[[107],0,1],[[107, 111, 114],0,1],[[107],0,1]]
+    #snr1 = [[1,2,1]
+
+
+
+
+    # START OF MIDI CONSTRUCTION
+    ## ===========================================================
+
+    oursong = midi.Pattern()
+
+    # creation of drums tracks
+    hats = midi.Track()
+    snare = midi.Track()
+    kick = midi.Track()
+    oursong.append(hats)
+    oursong.append(snare)
+    oursong.append(kick)
+
+    rand_hats = random.randint(1, 4)
+    rand_snare = random.randint(1, 4)
+    rand_kick = random.randint(1, 2)
+
+    for i in range(0, 10):
+        addToTrack(hats, drum_beats_dict["hats"][str(rand_hats)], tpb)
+        addToTrack(snare, drum_beats_dict["snare"][str(rand_snare)], tpb)
+        addToTrack(kick, drum_beats_dict["kick"][str(rand_kick)], tpb)
+
+    # adding end of tracks to the drums tracks
+    hats.append(midi.EndOfTrackEvent(tick = 1))
+    snare.append(midi.EndOfTrackEvent(tick = 1))
+    kick.append(midi.EndOfTrackEvent(tick = 1))
+
+    # printing and writing midi file
+    print oursong
+    midi.write_midifile("test.mid", oursong)
+
+    ## ============================================================
+
+
 
 # track is the track to add a sequence to
 # note is the note in midi.G_3 or equivalent
 # notelen in beats, not ticks
 # seq is sequence of beats to append, e.g. hat1
-def addToTrack(track, seq):
+def addToTrack(track, seq, tpb):
 	l = len(seq)
 	for i in range(0,l):
 		temp = seq[i]
@@ -60,17 +100,5 @@ def addToTrack(track, seq):
 			track.append(off)
 
 
-oursong = midi.Pattern()
-
-#drums
-drums = midi.Track()
-oursong.append(drums)
-
-addToTrack(drums, hat1)
-#addToTrack(drums, snr1)
-
-drums.append(midi.EndOfTrackEvent(tick = 1))
-
-print oursong
-midi.write_midifile("test.mid", oursong)
-
+if __name__ == "__main__":
+    main()
