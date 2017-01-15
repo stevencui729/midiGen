@@ -4,6 +4,8 @@ import midi
 import random
 import json
 import os
+import chord_transition as ct
+import testing_rhythm as tr
 
 
 def main():
@@ -63,6 +65,13 @@ def main():
     snare.append(midi.EndOfTrackEvent(tick = 1))
     kick.append(midi.EndOfTrackEvent(tick = 1))
 
+    # making chords dude
+    chords = midi.Track()
+    oursong.append(chords)
+    roots = ct.root_list(10)
+    makeChords(chords, chordList(roots))
+
+
     # printing and writing midi file
     print oursong
     midi.write_midifile("test.mid", oursong)
@@ -107,6 +116,20 @@ def rootToChord(root, maj):
 	elif maj == 0:
 		return [root, root+3, root+7, root+10, root+14]
 
+
+# take a list of roots and turn it into a list of chords
+def chordList(roots):
+    new = []
+    for i in roots:
+        new.append(rootToChord(i[0],i[1]))
+    return new
+
+def makeChords(track, chords):
+    start = 0
+    for chord in chords:
+        (bar, start) = tr.make_chord_rhythms(tr.make_chord_beat(), chord, start)
+        addToTrack(track, bar, tpb)
+    track.append(midi.EndOfTrackEvent(tick = 1))
 
 
 if __name__ == "__main__":

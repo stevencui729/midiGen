@@ -1,5 +1,5 @@
 import random
-import numpy as np 
+import numpy as np
 
 def pick_key():
 	key = random.randint(36,47)
@@ -36,5 +36,11 @@ def chord_transition(viable_chords):
 	return new_chord
 
 
-(key_note, maj) = pick_key()
-viable_chords = define_viable_chords(key_note, maj)
+
+def root_list(n):
+	(key_note, maj) = pick_key()
+	viable_chords = define_viable_chords(key_note, maj)
+	roots = [[key_note,maj]]
+	for i in range(n):
+		roots.append(chord_transition(viable_chords))
+	return roots
