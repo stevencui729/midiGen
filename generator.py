@@ -71,8 +71,11 @@ def main():
     # making chords dude
     chords = midi.Track()
     oursong.append(chords)
-    roots = ct.root_list(n)
-    makeChords(chords, chordList(roots), tpb)
+    (key_note, maj) = ct.pick_key()
+    begin = 0
+    roots = ct.root_list(key_note, maj, 32)
+    begin = makeChords(chords, chordList(roots), begin, tpb)
+    chords.append(midi.EndOfTrackEvent(tick = 1))
 
 
     # printing and writing midi file
@@ -127,12 +130,12 @@ def chordList(roots):
         new.append(rootToChord(i[0],i[1]))
     return new
 
-def makeChords(track, chords, tpb):
-    start = 0
+def makeChords(track, chords, begin, tpb):
+    start = begin
     for chord in chords:
         (bar, start) = tr.make_chord_rhythms(tr.make_chord_beat(), chord, start)
         addToTrack(track, bar, tpb)
-    track.append(midi.EndOfTrackEvent(tick = 1))
+    return start
 
 
 if __name__ == "__main__":
