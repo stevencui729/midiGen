@@ -63,9 +63,12 @@ def main():
         addToTrack(snare, drum_beats_dict["snare"][str(rand_snare)], tpb)
         addToTrack(kick, drum_beats_dict["kick"][str(rand_kick)], tpb)
 
-    # adding end of tracks to the drums tracks
+    # adding end of tracks to the drums tracks and changing instrument from default piano to drums
+    hats.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[117]))
     hats.append(midi.EndOfTrackEvent(tick = 1))
+    snare.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[110]))
     snare.append(midi.EndOfTrackEvent(tick = 1))
+    kick.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[74]))
     kick.append(midi.EndOfTrackEvent(tick = 1))
 
     # making chords dude
@@ -76,6 +79,7 @@ def main():
     roots = ct.root_list(key_note, maj, 32)
     begin = makeChords(chords, chordList(roots), begin, tpb)
     chords.append(midi.EndOfTrackEvent(tick = 1))
+
 
 
     # printing and writing midi file
@@ -132,6 +136,7 @@ def chordList(roots):
 
 def makeChords(track, chords, begin, tpb):
     start = begin
+
     for chord in chords:
         (bar, start) = tr.make_chord_rhythms(tr.make_chord_beat(), chord, start)
         addToTrack(track, bar, tpb)
