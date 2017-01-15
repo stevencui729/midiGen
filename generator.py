@@ -51,6 +51,13 @@ def main():
     oursong.append(snare)
     oursong.append(kick)
 
+    hats_program = ProgramChangeEvent(tick=0, channel=0, data=[5])
+    snare_program = ProgramChangeEvent(tick=0, channel=0, data=[7])
+    kick_program = ProgramChangeEvent(tick=0, channel=0, data=[9])
+    track.append(hats_program)
+    track.append(snare_program)
+    track.append(kick_program)
+
     rand_hats = random.randint(1, 4)
     rand_snare = random.randint(1, 4)
     rand_kick = random.randint(1, 2)
