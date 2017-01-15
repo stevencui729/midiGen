@@ -17,7 +17,7 @@ def make_chord_beat():
 		else:
 			beats.append(False)
 
-	print beats 
+	# print beats 
 	return beats
 
 
@@ -38,11 +38,11 @@ def make_chord_rhythms(beats, chord, start=0):
 			chord_rhythm.append([chord, 0.25*len_rest, 0.25])
 			len_rest = 0
 
-	print chord_rhythm
+	# print chord_rhythm
 	return (chord_rhythm, len_rest)
 
 beats = make_chord_beat()
-print beats
+# print beats
 chord_rhythm = make_chord_rhythms(beats , ['C', 'E', 'G'])
 
 

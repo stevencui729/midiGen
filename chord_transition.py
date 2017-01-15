@@ -4,7 +4,7 @@ import numpy as np
 def pick_key():
 	key = random.randint(58,69)
 	maj = random.randint(0,1)
-	print (key, maj)
+	# print (key, maj)
 	return (key, maj)
 
 def define_viable_chords(key_note, maj):
@@ -24,7 +24,7 @@ def define_viable_chords(key_note, maj):
 			viable.append([key_note+step, if_minor[i]])
 
 
-	print viable 
+	# print viable 
 	return viable 
 
 def chord_transition(viable_chords):

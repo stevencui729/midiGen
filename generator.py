@@ -7,6 +7,7 @@ import os
 import chord_transition as ct
 import testing_rhythm as tr
 import bass_line as bl
+import name
 
 def main():
     drum_beats_dict = {}
@@ -101,11 +102,12 @@ def main():
     chords.append(midi.EndOfTrackEvent(tick = 1))
     bass.append(midi.EndOfTrackEvent(tick = 1))
 
-
+    songname = name.makeName()
+    print songname
 
     # printing and writing midi file
-    print oursong
-    midi.write_midifile("test.mid", oursong)
+    # print oursong
+    midi.write_midifile(songname, oursong)
 
     ## ============================================================
 
