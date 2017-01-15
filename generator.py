@@ -51,13 +51,6 @@ def main():
     oursong.append(snare)
     oursong.append(kick)
 
-    hats_program = ProgramChangeEvent(tick=0, channel=0, data=[5])
-    snare_program = ProgramChangeEvent(tick=0, channel=0, data=[7])
-    kick_program = ProgramChangeEvent(tick=0, channel=0, data=[9])
-    track.append(hats_program)
-    track.append(snare_program)
-    track.append(kick_program)
-
     rand_hats = random.randint(1, 4)
     rand_snare = random.randint(1, 4)
     rand_kick = random.randint(1, 2)
@@ -67,17 +60,19 @@ def main():
         addToTrack(snare, drum_beats_dict["snare"][str(rand_snare)], tpb)
         addToTrack(kick, drum_beats_dict["kick"][str(rand_kick)], tpb)
 
-    # adding end of tracks to the drums tracks
+    # adding end of tracks to the drums tracks and changing instrument from default piano to drums
+    hats.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[117]))
     hats.append(midi.EndOfTrackEvent(tick = 1))
+    snare.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[110]))
     snare.append(midi.EndOfTrackEvent(tick = 1))
+    kick.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[74]))
     kick.append(midi.EndOfTrackEvent(tick = 1))
 
     # making chords dude
     chords = midi.Track()
     oursong.append(chords)
     roots = ct.root_list(10)
-    makeChords(chords, chordList(roots))
-
+    makeChords(chords, chordList(roots), tpb)
 
     # printing and writing midi file
     print oursong
@@ -131,7 +126,7 @@ def chordList(roots):
         new.append(rootToChord(i[0],i[1]))
     return new
 
-def makeChords(track, chords):
+def makeChords(track, chords, tpb):
     start = 0
     for chord in chords:
         (bar, start) = tr.make_chord_rhythms(tr.make_chord_beat(), chord, start)
