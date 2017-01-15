@@ -30,6 +30,9 @@ def main():
     # ticks per beat
     tpb = 220
 
+    # number of bars
+    n = 32
+
     # drum part
     # [[NOTES], start length (beats), chord length (beats)]
     #hat1 = [[[107, 110, 114],0,1],[[107],0,1],[[107, 111, 114],0,1],[[107],0,1]]
@@ -55,7 +58,7 @@ def main():
     rand_snare = random.randint(1, 4)
     rand_kick = random.randint(1, 2)
 
-    for i in range(0, 10):
+    for i in range(0, n):
         addToTrack(hats, drum_beats_dict["hats"][str(rand_hats)], tpb)
         addToTrack(snare, drum_beats_dict["snare"][str(rand_snare)], tpb)
         addToTrack(kick, drum_beats_dict["kick"][str(rand_kick)], tpb)
@@ -68,8 +71,8 @@ def main():
     # making chords dude
     chords = midi.Track()
     oursong.append(chords)
-    roots = ct.root_list(10)
-    makeChords(chords, chordList(roots))
+    roots = ct.root_list(n)
+    makeChords(chords, chordList(roots), tpb)
 
 
     # printing and writing midi file
@@ -124,7 +127,7 @@ def chordList(roots):
         new.append(rootToChord(i[0],i[1]))
     return new
 
-def makeChords(track, chords):
+def makeChords(track, chords, tpb):
     start = 0
     for chord in chords:
         (bar, start) = tr.make_chord_rhythms(tr.make_chord_beat(), chord, start)
