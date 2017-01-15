@@ -54,6 +54,15 @@ def main():
     oursong.append(snare)
     oursong.append(kick)
 
+    # adding end of tracks to the drums tracks and changing instrument from default piano to drums
+    hats.append(midi.ProgramChangeEvent(tick=0, channel=10, data=[35]))
+    hats.append(midi.ControlChangeEvent(tick=0, channel=10, data=[0,120]))
+    hats.append(midi.ControlChangeEvent(tick=0, channel=10, data=[32,0]))
+    hats.append(midi.ProgramChangeEvent(tick=0, channel=10, data=[1]))
+    snare.append(midi.ProgramChangeEvent(tick=0, channel=10, data=[38]))
+    kick.append(midi.ProgramChangeEvent(tick=0, channel=10, data=[42]))
+    
+
     rand_hats = random.randint(1, 4)
     rand_snare = random.randint(1, 4)
     rand_kick = random.randint(1, 2)
@@ -63,17 +72,15 @@ def main():
         addToTrack(snare, drum_beats_dict["snare"][str(rand_snare)], tpb)
         addToTrack(kick, drum_beats_dict["kick"][str(rand_kick)], tpb)
 
-    # adding end of tracks to the drums tracks and changing instrument from default piano to drums
-    hats.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[117]))
     hats.append(midi.EndOfTrackEvent(tick = 1))
-    snare.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[110]))
     snare.append(midi.EndOfTrackEvent(tick = 1))
-    kick.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[74]))
     kick.append(midi.EndOfTrackEvent(tick = 1))
+    
 
     # making chords dude
     chords = midi.Track()
     oursong.append(chords)
+    chords.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[82]))
     (key_note, maj) = ct.pick_key()
     begin = 0
     roots = ct.root_list(key_note, maj, 32)
