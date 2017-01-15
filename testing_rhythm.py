@@ -21,13 +21,13 @@ def make_chord_beat():
 	return beats
 
 
-def make_chord_rhythms(beats, chord):
+def make_chord_rhythms(beats, chord, start=0):
 	'''
 	takes in list of 16 booleans and a list of notes
 	returns list of objects to use in track writer
 	'''
 
-	len_rest = 0
+	len_rest = start
 
 	chord_rhythm = []
 
@@ -39,11 +39,11 @@ def make_chord_rhythms(beats, chord):
 			len_rest = 0
 
 	print chord_rhythm
-	return chord_rhythm
+	return (chord_rhythm, len_rest)
 
 beats = make_chord_beat()
 print beats
-make_chord_rhythms(beats , ['C', 'E', 'G'])
+chord_rhythm = make_chord_rhythms(beats , ['C', 'E', 'G'])
 
 
 
