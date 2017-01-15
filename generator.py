@@ -70,6 +70,7 @@ def main():
 
     bass = midi.Track()
     oursong.append(bass)
+    begin = 0
 
     for k in range(0,2):
 
@@ -87,7 +88,6 @@ def main():
 
         # making chords dude
         (key_note, maj) = ct.pick_key()
-        begin = 0
         roots = ct.root_list(key_note, maj, n)
         begin = makeChords(chords, chordList(roots), begin, tpb)
         
@@ -95,6 +95,10 @@ def main():
         # making da bass man
         for root in roots:
             addToTrack(bass,bl.make_bass(root),tpb)
+
+    roots2 = ct.root_list(key_note, maj, 0)
+    makeChords(chords, chordList(roots2), begin, tpb)
+
 
     hats.append(midi.EndOfTrackEvent(tick = 1))
     snare.append(midi.EndOfTrackEvent(tick = 1))
