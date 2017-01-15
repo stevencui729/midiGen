@@ -2,7 +2,7 @@ import random
 import numpy as np
 
 def pick_key():
-	key = random.randint(53,64)
+	key = random.randint(58,69)
 	maj = random.randint(0,1)
 	print (key, maj)
 	return (key, maj)

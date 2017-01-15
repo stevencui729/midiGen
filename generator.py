@@ -6,7 +6,7 @@ import json
 import os
 import chord_transition as ct
 import testing_rhythm as tr
-
+import bass_line as bl
 
 def main():
     drum_beats_dict = {}
@@ -31,7 +31,7 @@ def main():
     tpb = 220
 
     # number of bars
-    n = 32
+    n = 16
 
     # drum part
     # [[NOTES], start length (beats), chord length (beats)]
@@ -63,29 +63,43 @@ def main():
     kick.append(midi.ProgramChangeEvent(tick=0, channel=10, data=[42]))
     
 
-    rand_hats = random.randint(1, 4)
-    rand_snare = random.randint(1, 4)
-    rand_kick = random.randint(1, 2)
+    chords = midi.Track()
+    oursong.append(chords)
+    chords.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[82]))
 
-    for i in range(0, n):
-        addToTrack(hats, drum_beats_dict["hats"][str(rand_hats)], tpb)
-        addToTrack(snare, drum_beats_dict["snare"][str(rand_snare)], tpb)
-        addToTrack(kick, drum_beats_dict["kick"][str(rand_kick)], tpb)
+    bass = midi.Track()
+    oursong.append(bass)
+
+    for k in range(0,2):
+
+        rand_hats = random.randint(1, 4)
+        rand_snare = random.randint(1, 4)
+        rand_kick = random.randint(1, 2)
+
+        for i in range(0, n):
+            addToTrack(hats, drum_beats_dict["hats"][str(rand_hats)], tpb)
+            addToTrack(snare, drum_beats_dict["snare"][str(rand_snare)], tpb)
+            addToTrack(kick, drum_beats_dict["kick"][str(rand_kick)], tpb)
+
+        
+        
+
+        # making chords dude
+        (key_note, maj) = ct.pick_key()
+        begin = 0
+        roots = ct.root_list(key_note, maj, n)
+        begin = makeChords(chords, chordList(roots), begin, tpb)
+        
+
+        # making da bass man
+        for root in roots:
+            addToTrack(bass,bl.make_bass(root),tpb)
 
     hats.append(midi.EndOfTrackEvent(tick = 1))
     snare.append(midi.EndOfTrackEvent(tick = 1))
     kick.append(midi.EndOfTrackEvent(tick = 1))
-    
-
-    # making chords dude
-    chords = midi.Track()
-    oursong.append(chords)
-    chords.append(midi.ProgramChangeEvent(tick=0, channel=0, data=[82]))
-    (key_note, maj) = ct.pick_key()
-    begin = 0
-    roots = ct.root_list(key_note, maj, 32)
-    begin = makeChords(chords, chordList(roots), begin, tpb)
     chords.append(midi.EndOfTrackEvent(tick = 1))
+    bass.append(midi.EndOfTrackEvent(tick = 1))
 
 
 
